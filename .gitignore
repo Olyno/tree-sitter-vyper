@@ -3,22 +3,14 @@ target/
 
 # Node artifacts
 build/
-prebuilds/
 node_modules/
 
-# Swift artifacts
-.build/
+# WASM (built on demand)
+*.wasm
 
-# Go artifacts
-_obj/
-
-# Python artifacts
-.venv/
-dist/
-*.egg-info
-*.whl
-
-# C artifacts
+# Grammar artifacts
+*.obj
+*.o
 *.a
 *.so
 *.so.*
@@ -27,19 +19,6 @@ dist/
 *.pc
 *.exp
 *.lib
-
-# Zig artifacts
-.zig-cache/
-zig-cache/
-zig-out/
-
-# Example dirs
-/examples/*/
-
-# Grammar volatiles
-*.wasm
-*.obj
-*.o
 
 # Archives
 *.tar.gz
