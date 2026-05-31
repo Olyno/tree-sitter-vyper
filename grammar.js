@@ -37,7 +37,7 @@ const PREC = {
 const SEMICOLON = ';';
 
 module.exports = grammar({
-  name: 'python',
+  name: 'vyper',
 
   extras: $ => [
     $.comment,
@@ -50,11 +50,7 @@ module.exports = grammar({
     [$.primary_expression, $.list_splat_pattern],
     [$.tuple, $.tuple_pattern],
     [$.list, $.list_pattern],
-    [$.with_item, $._collection_elements],
-    [$.named_expression, $.as_pattern],
-    [$.print_statement, $.primary_expression],
     [$.type_alias_statement, $.primary_expression],
-    [$.match_statement, $.primary_expression],
   ],
 
   supertypes: $ => [
@@ -102,14 +98,14 @@ module.exports = grammar({
 
   reserved: {
     global: _ => [
-      // https://docs.python.org/3/reference/lexical_analysis.html#keywords
-      'False', 'await', 'else', 'import', 'pass',
-      'None', 'break', 'except', 'in', 'raise',
-      'True', 'class', 'finally', 'is', 'return',
-      'and', 'continue', 'for', 'lambda', 'try',
-      'as', 'def', 'from', 'nonlocal', 'while',
-      'assert', 'del', 'global', 'not', 'with',
-      'async', 'elif', 'if', 'or', 'yield',
+      // Vyper keywords — reserved so they can't be used as identifiers
+      'False', 'else', 'import', 'pass',
+      'None', 'break', 'in', 'raise',
+      'True', 'is', 'return',
+      'and', 'continue', 'for', 'lambda',
+      'as', 'def', 'from', 'while',
+      'assert', 'del', 'not',
+      'elif', 'if', 'or',
     ],
   },
 
@@ -132,21 +128,17 @@ module.exports = grammar({
     ),
 
     _simple_statement: $ => choice(
-      $.future_import_statement,
       $.import_statement,
       $.import_from_statement,
-      $.print_statement,
       $.assert_statement,
       $.expression_statement,
       $.return_statement,
       $.delete_statement,
       $.raise_statement,
+      $.log_statement,
       $.pass_statement,
       $.break_statement,
       $.continue_statement,
-      $.global_statement,
-      $.nonlocal_statement,
-      $.exec_statement,
       $.type_alias_statement,
     ),
 
@@ -160,16 +152,6 @@ module.exports = grammar({
     relative_import: $ => seq(
       $.import_prefix,
       optional($.dotted_name),
-    ),
-
-    future_import_statement: $ => seq(
-      'from',
-      '__future__',
-      'import',
-      choice(
-        $._import_list,
-        seq('(', $._import_list, ')'),
-      ),
     ),
 
     import_from_statement: $ => seq(
@@ -202,25 +184,6 @@ module.exports = grammar({
 
     wildcard_import: _ => '*',
 
-    print_statement: $ => choice(
-      prec(1, seq(
-        'print',
-        $.chevron,
-        repeat(seq(',', field('argument', $.expression))),
-        optional(',')),
-      ),
-      prec(-3, prec.dynamic(-1, seq(
-        'print',
-        commaSep1(field('argument', $.expression)),
-        optional(','),
-      ))),
-    ),
-
-    chevron: $ => seq(
-      '>>',
-      $.expression,
-    ),
-
     assert_statement: $ => seq(
       'assert',
       commaSep1($.expression),
@@ -231,22 +194,10 @@ module.exports = grammar({
       $.tuple_expression,
       $.assignment,
       $.augmented_assignment,
-      $.yield,
     ),
 
     tuple_expression: $ =>
       seq($.expression, ',', optional(seq(commaSep1($.expression), optional(',')))),
-
-    named_expression: $ => seq(
-      field('name', $._named_expression_lhs),
-      ':=',
-      field('value', $.expression),
-    ),
-
-    _named_expression_lhs: $ => choice(
-      $.identifier,
-      $.keyword_identifier,
-    ),
 
     return_statement: $ => seq(
       'return',
@@ -269,6 +220,11 @@ module.exports = grammar({
       optional(seq('from', field('cause', $.expression))),
     ),
 
+    log_statement: $ => seq(
+      'log',
+      $._expressions,
+    ),
+
     pass_statement: _ => prec.left('pass'),
     break_statement: _ => prec.left('break'),
     continue_statement: _ => prec.left('continue'),
@@ -279,12 +235,12 @@ module.exports = grammar({
       $.if_statement,
       $.for_statement,
       $.while_statement,
-      $.try_statement,
-      $.with_statement,
       $.function_definition,
-      $.class_definition,
       $.decorated_definition,
-      $.match_statement,
+      $.event_definition,
+      $.struct_definition,
+      $.interface_definition,
+      $.enum_definition,
     ),
 
     if_statement: $ => seq(
@@ -309,34 +265,7 @@ module.exports = grammar({
       field('body', $._suite),
     ),
 
-    match_statement: $ => seq(
-      'match',
-      commaSep1(field('subject', $.expression)),
-      optional(','),
-      ':',
-      field('body', alias($._match_block, $.block)),
-    ),
-
-    _match_block: $ => choice(
-      seq(
-        $._indent,
-        repeat(field('alternative', $.case_clause)),
-        $._dedent,
-      ),
-      $._newline,
-    ),
-
-    case_clause: $ => seq(
-      'case',
-      commaSep1($.case_pattern),
-      optional(','),
-      optional(field('guard', $.if_clause)),
-      ':',
-      field('consequence', $._suite),
-    ),
-
     for_statement: $ => seq(
-      optional('async'),
       'for',
       field('left', $._left_hand_side),
       'in',
@@ -354,54 +283,7 @@ module.exports = grammar({
       optional(field('alternative', $.else_clause)),
     ),
 
-    try_statement: $ => seq(
-      'try',
-      ':',
-      field('body', $._suite),
-      repeat($.except_clause),
-      optional($.else_clause),
-      optional($.finally_clause),
-    ),
-
-    except_clause: $ => seq(
-      'except',
-      optional(token(prec(1, '*'))),
-      optional(choice(
-        seq(
-          field('value', $.expression),
-          optional(seq('as', field('alias', $.expression))),
-        ),
-        commaSep1(field('value', $.expression)),
-      )),
-      ':',
-      $._suite,
-    ),
-
-    finally_clause: $ => seq(
-      'finally',
-      ':',
-      $._suite,
-    ),
-
-    with_statement: $ => seq(
-      optional('async'),
-      'with',
-      $.with_clause,
-      ':',
-      field('body', $._suite),
-    ),
-
-    with_clause: $ => choice(
-      seq(commaSep1($.with_item), optional(',')),
-      seq('(', commaSep1($.with_item), optional(','), ')'),
-    ),
-
-    with_item: $ => prec.dynamic(1, seq(
-      field('value', $.expression),
-    )),
-
     function_definition: $ => seq(
-      optional('async'),
       'def',
       field('name', $.identifier),
       field('type_parameters', optional($.type_parameter)),
@@ -434,27 +316,6 @@ module.exports = grammar({
       $.expression,
     ),
 
-    global_statement: $ => seq(
-      'global',
-      commaSep1($.identifier),
-    ),
-
-    nonlocal_statement: $ => seq(
-      'nonlocal',
-      commaSep1($.identifier),
-    ),
-
-    exec_statement: $ => seq(
-      'exec',
-      field('code', choice($.string, $.identifier)),
-      optional(
-        seq(
-          'in',
-          commaSep1($.expression),
-        ),
-      ),
-    ),
-
     type_alias_statement: $ => prec.dynamic(1, seq(
       'type',
       field('left', $.type),
@@ -462,19 +323,71 @@ module.exports = grammar({
       field('right', $.type),
     )),
 
-    class_definition: $ => seq(
-      'class',
-      field('name', $.identifier),
-      field('type_parameters', optional($.type_parameter)),
-      field('superclasses', optional($.argument_list)),
-      ':',
-      field('body', $._suite),
-    ),
     type_parameter: $ => seq(
       '[',
       commaSep1($.type),
       optional(','),
       ']',
+    ),
+
+    event_definition: $ => seq(
+      'event',
+      field('name', $.identifier),
+      ':',
+      field('body', $._suite),
+    ),
+
+    struct_definition: $ => seq(
+      'struct',
+      field('name', $.identifier),
+      ':',
+      field('body', $._suite),
+    ),
+
+    interface_definition: $ => seq(
+      'interface',
+      field('name', $.identifier),
+      ':',
+      field('body', $.interface_sigs),
+    ),
+
+    interface_sigs: $ => seq(
+      $._newline,
+      $._indent,
+      repeat1($.interface_sig),
+      $._dedent,
+    ),
+
+    interface_sig: $ => seq(
+      'def',
+      field('name', $.identifier),
+      field('parameters', $.parameters),
+      optional(
+        seq(
+          '->',
+          field('return_type', $.type),
+        ),
+      ),
+      ':',
+      field('mutability', $.identifier),
+    ),
+
+    enum_definition: $ => seq(
+      'enum',
+      field('name', $.identifier),
+      ':',
+      field('members', $.enum_members),
+    ),
+
+    enum_members: $ => seq(
+      $._indent,
+      repeat1(
+        seq(
+          $.identifier,
+          $._newline,
+        ),
+      ),
+      $._dedent,
     ),
 
     parenthesized_list_splat: $ => prec(PREC.parenthesized_list_splat, seq(
@@ -504,7 +417,6 @@ module.exports = grammar({
     decorated_definition: $ => seq(
       repeat1($.decorator),
       field('definition', choice(
-        $.class_definition,
         $.function_definition,
       )),
     ),
@@ -718,12 +630,10 @@ module.exports = grammar({
       $.lambda,
       $.primary_expression,
       $.conditional_expression,
-      $.named_expression,
       $.as_pattern,
     ),
 
     primary_expression: $ => choice(
-      $.await,
       $.binary_operator,
       $.identifier,
       $.keyword_identifier,
@@ -882,19 +792,7 @@ module.exports = grammar({
       $.assignment,
       $.augmented_assignment,
       $.pattern_list,
-      $.yield,
     ),
-
-    yield: $ => prec.right(seq(
-      'yield',
-      choice(
-        seq(
-          'from',
-          $.expression,
-        ),
-        optional($._expressions),
-      ),
-    )),
 
     attribute: $ => prec(PREC.call, seq(
       field('object', $.primary_expression),
@@ -1034,13 +932,13 @@ module.exports = grammar({
 
     parenthesized_expression: $ => prec(PREC.parenthesized_expression, seq(
       '(',
-      choice($.expression, $.yield),
+      choice($.expression),
       ')',
     )),
 
     _collection_elements: $ => seq(
       commaSep1(choice(
-        $.expression, $.yield, $.list_splat, $.parenthesized_list_splat,
+        $.expression, $.list_splat, $.parenthesized_list_splat,
       )),
       optional(','),
     ),
@@ -1099,7 +997,6 @@ module.exports = grammar({
       $.expression,
       $.expression_list,
       $.pattern_list,
-      $.yield,
     ),
 
     escape_sequence: _ => token.immediate(prec(1, seq(
@@ -1187,11 +1084,6 @@ module.exports = grammar({
     true: _ => 'True',
     false: _ => 'False',
     none: _ => 'None',
-
-    await: $ => prec(PREC.unary, seq(
-      'await',
-      $.primary_expression,
-    )),
 
     comment: _ => token(seq('#', /.*/)),
 
