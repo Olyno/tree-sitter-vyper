@@ -1,21 +1,21 @@
 {
-  "name": "tree-sitter-vyper",
+  "name": "@olyno/tree-sitter-vyper",
   "version": "0.1.0",
   "description": "Vyper grammar for tree-sitter",
   "repository": "https://github.com/Olyno/tree-sitter-vyper",
   "license": "MIT",
   "author": {
-    "name": "Max Brunsfeld",
-    "email": "maxbrunsfeld@gmail.com"
+    "name": "Olyno",
+    "email": "olyno.dev@gmail.com"
   },
   "contributors": [
     {
-      "name": "Amaan Qureshi",
-      "email": "amaanq12@gmail.com"
+      "name": "Max Brunsfeld",
+      "email": "maxbrunsfeld@gmail.com"
     },
     {
-      "name": "Olyno",
-      "email": "olyno.dev@gmail.com"
+      "name": "Amaan Qureshi",
+      "email": "amaanq12@gmail.com"
     }
   ],
   "main": "bindings/node",
