@@ -23,6 +23,7 @@
   "scripts": {
     "build:wasm": "tree-sitter build --wasm",
     "lint": "eslint grammar.js",
+    "prepublishOnly": "tree-sitter build --wasm",
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
     "test": "tree-sitter test"
