@@ -1,47 +1,22 @@
 [
-  (list)
-  (dictionary)
-  (set)
-
   (if_statement)
   (for_statement)
-  (while_statement)
-  (import_from_statement)
-
-  (parenthesized_expression)
-  (list_comprehension)
-  (set_comprehension)
-  (dictionary_comprehension)
-
-  (tuple_pattern)
-  (list_pattern)
-  (binary_operator)
-
-  (lambda)
   (function_definition)
-
-  (concatenated_string)
+  (event_definition)
+  (struct_definition)
+  (enum_definition)
+  (interface_definition)
+  (import_from_statement)
+  (parenthesized_expression)
+  (binary_operator)
 ] @indent
 
-(if_statement
-  condition: (parenthesized_expression) @aligned_indent
-  (#set! "delimiter" "()")
-)
-((ERROR "(" . (_)) @aligned_indent
- (#set! "delimiter" "()"))
-((argument_list) @aligned_indent
- (#set! "delimiter" "()"))
-((argument_list) @aligned_indent
- (#set! "delimiter" "()"))
-((parameters) @aligned_indent
- (#set! "delimiter" "()"))
-((tuple) @aligned_indent
- (#set! "delimiter" "()"))
+(argument_list) @aligned_indent
+(parameters) @aligned_indent
 
 [
   ")"
   "]"
-  "}"
   (elif_clause)
   (else_clause)
 ] @branch
