@@ -1,32 +1,24 @@
-tree-sitter-vyper
-==================
+# tree-sitter-python
 
-[![build](https://github.com/madlabman/tree-sitter-vyper/actions/workflows/ci.yml/badge.svg)](https://github.com/madlabman/tree-sitter-vyper/actions/workflows/ci.yml)
+[![CI][ci]](https://github.com/tree-sitter/tree-sitter-python/actions/workflows/ci.yml)
+[![discord][discord]](https://discord.gg/w7nTvsVJhm)
+[![matrix][matrix]](https://matrix.to/#/#tree-sitter-chat:matrix.org)
+[![crates][crates]](https://crates.io/crates/tree-sitter-python)
+[![npm][npm]](https://www.npmjs.com/package/tree-sitter-python)
+[![pypi][pypi]](https://pypi.org/project/tree-sitter-python/)
 
-Vyper grammar for [tree-sitter][].
+Python grammar for [tree-sitter][].
 
 [tree-sitter]: https://github.com/tree-sitter/tree-sitter
 
-#### Installation
+## References
 
-```lua
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.vyper = {
-	install_info = {
-		url = "https://github.com/madlabman/tree-sitter-vyper", -- local path or git repo
-		files = {
-			"src/parser.c",
-			"src/scanner.cc",
-		},
-		-- optional entries:
-		branch = "master", -- default branch in case of git repo if different from master
-		generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-		requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-	},
-	filetype = "vyper", -- if filetype does not match the parser name
-}
-```
+- [Python 2 Grammar](https://docs.python.org/2/reference/grammar.html)
+- [Python 3 Grammar](https://docs.python.org/3/reference/grammar.html)
 
-#### References
-
-* [Vyper Grammar](https://github.com/vyperlang/vyper/blob/master/vyper/ast/grammar.lark)
+[ci]: https://img.shields.io/github/actions/workflow/status/tree-sitter/tree-sitter-python/ci.yml?logo=github&label=CI
+[discord]: https://img.shields.io/discord/1063097320771698699?logo=discord&label=discord
+[matrix]: https://img.shields.io/matrix/tree-sitter-chat%3Amatrix.org?logo=matrix&label=matrix
+[npm]: https://img.shields.io/npm/v/tree-sitter-python?logo=npm
+[crates]: https://img.shields.io/crates/v/tree-sitter-python?logo=rust
+[pypi]: https://img.shields.io/pypi/v/tree-sitter-python?logo=pypi&logoColor=ffd242

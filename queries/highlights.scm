@@ -1,154 +1,60 @@
-;; From tree-sitter-python licensed under MIT License
-; Copyright (c) 2016 Max Brunsfeld
+; Identifier naming conventions
 
-; Variables
 (identifier) @variable
 
-; Reset highlighting in f-string interpolations
-(interpolation) @none
+((identifier) @constructor
+ (#match? @constructor "^[A-Z]"))
 
-;; Identifier naming conventions
-((identifier) @type
- (#lua-match? @type "^[A-Z].*[a-z]"))
 ((identifier) @constant
- (#lua-match? @constant "^[A-Z][A-Z_0-9]*$"))
-
-((identifier) @constant.builtin
- (#lua-match? @constant.builtin "^__[a-zA-Z0-9_]*__$"))
-
-((identifier) @constant.builtin
- (#any-of? @constant.builtin
-           ;; https://docs.python.org/3/library/constants.html
-           "Ellipsis"
-           "quit"
-           "exit"
-           "copyright"
-           "credits"
-           "license"))
-
-((attribute
-    attribute: (identifier) @field)
- (#match? @field "^([A-Z])@!.*$"))
+ (#match? @constant "^[A-Z][A-Z_]*$"))
 
 ; Function calls
 
 (decorator) @function
-((decorator (attribute (identifier) @function))
- (#match? @function "^([A-Z])@!.*$"))
-(decorator) @function
-((decorator (identifier) @function)
- (#match? @function "^([A-Z])@!.*$"))
+(decorator
+  (identifier) @function)
 
 (call
-  function: (identifier) @function.call)
-
+  function: (attribute attribute: (identifier) @function.method))
 (call
-  function: (attribute
-              attribute: (identifier) @method.call))
+  function: (identifier) @function)
 
-((call
-   function: (identifier) @constructor)
- (#lua-match? @constructor "^[A-Z]"))
-
-((call
-  function: (attribute
-              attribute: (identifier) @constructor))
- (#lua-match? @constructor "^[A-Z]"))
-
-;; Builtin functions
-;; $(".sig-object .sig-name span.pre").map((_, v) => `"${v.innerText}"`).toArray().sort().join(" ")
+; Builtin functions
 
 ((call
   function: (identifier) @function.builtin)
- (#any-of? @function.builtin
-          "_abi_decode" "_abi_encode" "abs" "as_wei_value" "bitwise_and" "bitwise_not" "bitwise_or" "bitwise_xor"
-          "blockhash" "ceil" "concat" "convert" "create_copy_of" "create_from_blueprint" "create_minimal_proxy_to"
-          "ecadd" "ecmul" "ecrecover" "empty" "extract32" "floor" "isqrt" "keccak256" "len" "max" "max_value"
-          "method_id" "min" "min_value" "pow_mod256" "print" "raw_call" "raw_log" "selfdestruct" "send" "sha256" "shift"
-          "slice" "sqrt" "uint256_addmod" "uint256_mulmod" "uint2str" "unsafe_add" "unsafe_div" "unsafe_mul"
-          "unsafe_sub" "print" "indexed" "public" "constant" "immutable"))
+ (#match?
+   @function.builtin
+   "^(abs|all|any|ascii|bin|bool|breakpoint|bytearray|bytes|callable|chr|classmethod|compile|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|isinstance|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__)$"))
 
-;; Function definitions
+; Function definitions
 
 (function_definition
   name: (identifier) @function)
 
-(function_definition
-  name: (identifier) @constructor
- (#any-of? @constructor "__init__"))
-
+(attribute attribute: (identifier) @property)
 (type (identifier) @type)
-(type
-  (subscript
-    (identifier) @type)) ; type subscript: Tuple[int]
 
-((call
-  function: (identifier) @_isinstance
-  arguments: (argument_list
-    (_)
-    (identifier) @type))
- (#eq? @_isinstance "isinstance"))
+; Literals
 
-;; Normal parameters
-(parameters
-  (identifier) @parameter)
-;; Lambda parameters
-(lambda_parameters
-  (identifier) @parameter)
-(lambda_parameters
-  (tuple_pattern
-    (identifier) @parameter))
-; Default parameters
-(keyword_argument
-  name: (identifier) @parameter)
-; Naming parameters on call-site
-(default_parameter
-  name: (identifier) @parameter)
-(typed_parameter
-  (identifier) @parameter)
-(typed_default_parameter
-  (identifier) @parameter)
-; Variadic parameters *args, **kwargs
-(parameters
-  (list_splat_pattern ; *args
-    (identifier) @parameter))
-(parameters
-  (dictionary_splat_pattern ; **kwargs
-    (identifier) @parameter))
-
-
-;; Literals
-
-(none) @constant.builtin
-[(true) (false)] @boolean
-((identifier) @variable.builtin
- (#eq? @variable.builtin "self"))
-((identifier) @variable.builtin
- (#eq? @variable.builtin "cls"))
-((identifier) @variable.builtin
- (#eq? @variable.builtin "msg"))
-((identifier) @variable.builtin
- (#eq? @variable.builtin "block"))
-
-(integer) @number
-(float) @float
-
-(comment) @comment @spell
-
-((module . (comment) @preproc)
-  (#match? @preproc "^#!/"))
-
-(string) @string
 [
-  (escape_sequence)
-  "{{"
-  "}}"
-] @string.escape
+  (none)
+  (true)
+  (false)
+] @constant.builtin
 
-; doc-strings
-(expression_statement (string) @spell)
+[
+  (integer)
+  (float)
+] @number
 
-; Tokens
+(comment) @comment
+(string) @string
+(escape_sequence) @escape
+
+(interpolation
+  "{" @punctuation.special
+  "}" @punctuation.special) @embedded
 
 [
   "-"
@@ -169,6 +75,7 @@
   "^"
   "^="
   "+"
+  "->"
   "+="
   "<"
   "<<"
@@ -176,104 +83,55 @@
   "<="
   "<>"
   "="
+  ":="
   "=="
   ">"
   ">="
   ">>"
   ">>="
-  "@"
-  "@="
   "|"
   "|="
   "~"
-  "->"
-] @operator
-
-; Keywords
-[
+  "@="
   "and"
   "in"
   "is"
   "not"
   "or"
-
-  "del"
-] @keyword.operator
-
-[
-  "def"
-  "lambda"
-] @keyword.function
+  "is not"
+  "not in"
+] @operator
 
 [
-  "assert"
-  "pass"
   "as"
-  "log"
-  "event"
-  "struct"
-  "interface"
-] @keyword
-
-[
-  "return"
-] @keyword.return
-
-(import_from_statement "from" @include)
-"import" @include
-
-(aliased_import "as" @include)
-
-["if" "elif" "else"] @conditional
-
-["for" "while" "break" "continue"] @repeat
-
-[
+  "assert"
+  "async"
+  "await"
+  "break"
+  "class"
+  "continue"
+  "def"
+  "del"
+  "elif"
+  "else"
+  "except"
+  "exec"
+  "finally"
+  "for"
+  "from"
+  "global"
+  "if"
+  "import"
+  "lambda"
+  "nonlocal"
+  "pass"
+  "print"
   "raise"
-] @exception
-
-(raise_statement "from" @exception)
-
-["(" ")" "[" "]" "{" "}"] @punctuation.bracket
-
-(interpolation
-  "{" @punctuation.special
-  "}" @punctuation.special)
-
-["," "." ":" ";" (ellipsis)] @punctuation.delimiter
-
-;; Event definitions
-
-(event_definition
-  body: (block
-          (function_definition
-            name: (identifier) @method)))
-
-((event_definition
-  body: (block
-          (expression_statement
-            (assignment
-              left: (identifier) @field))))
- (#match? @field "^([A-Z])@!.*$"))
-((event_definition
-  body: (block
-          (expression_statement
-            (assignment
-              left: (_
-                     (identifier) @field)))))
- (#match? @field "^([A-Z])@!.*$"))
-
-;; Interface definitions
-
-(interface_definition
-  body: (interface_sigs
-          (interface_sig
-            name: (identifier) @method)))
-
-(interface_definition
-  body: (interface_sigs
-          (interface_sig
-            mutability: (identifier) @keyword)))
-
-;; Error
-(ERROR) @error
+  "return"
+  "try"
+  "while"
+  "with"
+  "yield"
+  "match"
+  "case"
+] @keyword
