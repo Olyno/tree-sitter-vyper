@@ -256,6 +256,10 @@
         "named": true
       },
       {
+        "type": "extcall",
+        "named": true
+      },
+      {
         "type": "false",
         "named": true
       },
@@ -301,6 +305,10 @@
       },
       {
         "type": "set_comprehension",
+        "named": true
+      },
+      {
+        "type": "staticcall",
         "named": true
       },
       {
@@ -438,6 +446,10 @@
           {
             "type": "pattern_list",
             "named": true
+          },
+          {
+            "type": "typed_parameter",
+            "named": true
           }
         ]
       },
@@ -519,6 +531,10 @@
           },
           {
             "type": "pattern_list",
+            "named": true
+          },
+          {
+            "type": "typed_parameter",
             "named": true
           }
         ]
@@ -1220,6 +1236,21 @@
     }
   },
   {
+    "type": "extcall",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "call",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "for_in_clause",
     "named": true,
     "fields": {
@@ -1233,6 +1264,10 @@
           },
           {
             "type": "pattern_list",
+            "named": true
+          },
+          {
+            "type": "typed_parameter",
             "named": true
           }
         ]
@@ -1287,6 +1322,10 @@
           },
           {
             "type": "pattern_list",
+            "named": true
+          },
+          {
+            "type": "typed_parameter",
             "named": true
           }
         ]
@@ -2260,6 +2299,21 @@
     }
   },
   {
+    "type": "staticcall",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "call",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "string",
     "named": true,
     "fields": {},
@@ -2884,6 +2938,10 @@
     "named": false
   },
   {
+    "type": "extcall",
+    "named": false
+  },
+  {
     "type": "false",
     "named": true
   },
@@ -2962,6 +3020,10 @@
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "staticcall",
     "named": false
   },
   {

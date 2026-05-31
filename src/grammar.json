@@ -544,6 +544,32 @@
         }
       ]
     },
+    "extcall_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "extcall"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_expressions"
+        }
+      ]
+    },
+    "staticcall_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "staticcall"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_expressions"
+        }
+      ]
+    },
     "pass_statement": {
       "type": "PREC_LEFT",
       "value": 0,
@@ -2664,6 +2690,14 @@
         },
         {
           "type": "SYMBOL",
+          "name": "extcall"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "staticcall"
+        },
+        {
+          "type": "SYMBOL",
           "name": "list"
         },
         {
@@ -3642,6 +3676,10 @@
         {
           "type": "SYMBOL",
           "name": "pattern_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "typed_parameter"
         }
       ]
     },
@@ -3934,6 +3972,40 @@
                 }
               ]
             }
+          }
+        ]
+      }
+    },
+    "extcall": {
+      "type": "PREC",
+      "value": 22,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "extcall"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "call"
+          }
+        ]
+      }
+    },
+    "staticcall": {
+      "type": "PREC",
+      "value": 22,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "staticcall"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "call"
           }
         ]
       }
@@ -5582,6 +5654,14 @@
       {
         "type": "STRING",
         "value": "or"
+      },
+      {
+        "type": "STRING",
+        "value": "extcall"
+      },
+      {
+        "type": "STRING",
+        "value": "staticcall"
       }
     ]
   }

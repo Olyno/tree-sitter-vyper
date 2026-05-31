@@ -106,6 +106,7 @@ module.exports = grammar({
       'as', 'def', 'from', 'while',
       'assert', 'del', 'not',
       'elif', 'if', 'or',
+      'extcall', 'staticcall',
     ],
   },
 
@@ -222,6 +223,16 @@ module.exports = grammar({
 
     log_statement: $ => seq(
       'log',
+      $._expressions,
+    ),
+
+    extcall_statement: $ => seq(
+      'extcall',
+      $._expressions,
+    ),
+
+    staticcall_statement: $ => seq(
+      'staticcall',
       $._expressions,
     ),
 
@@ -648,6 +659,8 @@ module.exports = grammar({
       $.attribute,
       $.subscript,
       $.call,
+      $.extcall,
+      $.staticcall,
       $.list,
       $.list_comprehension,
       $.dictionary,
@@ -770,6 +783,7 @@ module.exports = grammar({
     _left_hand_side: $ => choice(
       $.pattern,
       $.pattern_list,
+      $.typed_parameter,
     ),
 
     pattern_list: $ => seq(
@@ -823,6 +837,16 @@ module.exports = grammar({
         $.generator_expression,
         $.argument_list,
       )),
+    )),
+
+    extcall: $ => prec(PREC.call, seq(
+      'extcall',
+      $.call,
+    )),
+
+    staticcall: $ => prec(PREC.call, seq(
+      'staticcall',
+      $.call,
     )),
 
     typed_parameter: $ => prec(PREC.typed_parameter, seq(
