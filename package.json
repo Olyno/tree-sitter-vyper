@@ -1,6 +1,6 @@
 {
   "name": "@olyno/tree-sitter-vyper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vyper grammar for tree-sitter",
   "repository": "https://github.com/Olyno/tree-sitter-vyper",
   "license": "MIT",
