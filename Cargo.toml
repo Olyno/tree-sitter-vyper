@@ -1,16 +1,16 @@
 [package]
-name = "tree-sitter-python"
-description = "Python grammar for tree-sitter"
-version = "0.25.0"
+name = "tree-sitter-vyper"
+description = "Vyper grammar for tree-sitter"
+version = "0.1.0"
 authors = [
   "Max Brunsfeld <maxbrunsfeld@gmail.com>",
   "Amaan Qureshi <amaanq12@gmail.com>",
 ]
 license = "MIT"
 readme = "README.md"
-keywords = ["incremental", "parsing", "tree-sitter", "python"]
+keywords = ["incremental", "parsing", "tree-sitter", "vyper"]
 categories = ["parser-implementations", "parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-python"
+repository = "https://github.com/ametade/tree-sitter-vyper"
 edition = "2021"
 autoexamples = false
 

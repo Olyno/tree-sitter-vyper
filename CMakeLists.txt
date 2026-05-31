@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(tree-sitter-python
-        VERSION "0.25.0"
-        DESCRIPTION "Python grammar for tree-sitter"
-        HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-python"
+project(tree-sitter-vyper
+        VERSION "0.1.0"
+        DESCRIPTION "Vyper grammar for tree-sitter"
+        HOMEPAGE_URL "https://github.com/ametade/tree-sitter-vyper"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -59,7 +59,7 @@ install(TARGETS tree-sitter-python
 
 file(GLOB QUERIES queries/*.scm)
 install(FILES ${QUERIES}
-        DESTINATION "${CMAKE_INSTALL_DATADIR}/tree-sitter/queries/python")
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/tree-sitter/queries/vyper")
 
 add_custom_target(ts-test "${TREE_SITTER_CLI}" test
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

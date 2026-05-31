@@ -1,4 +1,4 @@
-module github.com/tree-sitter/tree-sitter-python
+module github.com/ametade/tree-sitter-vyper
 
 go 1.22
 
