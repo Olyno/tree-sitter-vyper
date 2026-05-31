@@ -9,31 +9,28 @@ amount: constant(uint) = 10_000
 ---
 
 (module
-  (expression_statement
-    (assignment
-      (identifier)
-      (type
-        (call
-          (identifier)
-          (argument_list
-            (identifier))))))
-  (expression_statement
-    (assignment
-      (identifier)
-      (type
-        (call
-          (identifier)
-          (argument_list
-            (identifier))))))
-  (expression_statement
-    (assignment
-      (identifier)
-      (type
-        (call
-          (identifier)
-          (argument_list
-            (identifier))))
-      (integer))))
+  (assignment
+    (identifier)
+    (type
+      (call
+        (identifier)
+        (argument_list
+          (identifier)))))
+  (assignment
+    (identifier)
+    (type
+      (call
+        (identifier)
+        (argument_list
+          (identifier)))))
+  (assignment
+    (identifier)
+    (type
+      (call
+        (identifier)
+        (argument_list
+          (identifier))))
+    (integer)))
 
 ============
 Vyper events
@@ -49,21 +46,18 @@ event AuctionEnded:
   (event_definition
     (identifier)
     (block
-      (expression_statement
-        (assignment
-          (identifier)
-          (type
-            (identifier))))
-      (expression_statement
-        (assignment
-          (identifier)
-          (type
-            (identifier)))))))
+      (assignment
+        (identifier)
+        (type
+          (identifier)))
+      (assignment
+        (identifier)
+        (type
+          (identifier))))))
 
 =============
 Vyper structs
 =============
-
 
 struct Bid:
   blindedBid: bytes32
@@ -75,16 +69,14 @@ struct Bid:
   (struct_definition
     (identifier)
     (block
-      (expression_statement
-        (assignment
-          (identifier)
-          (type
-            (identifier))))
-      (expression_statement
-        (assignment
-          (identifier)
-          (type
-            (identifier)))))))
+      (assignment
+        (identifier)
+        (type
+          (identifier)))
+      (assignment
+        (identifier)
+        (type
+          (identifier))))))
 
 ================
 Vyper interfaces
