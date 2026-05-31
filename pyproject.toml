@@ -22,7 +22,7 @@ license.text = "MIT"
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://github.com/ametade/tree-sitter-vyper"
+Homepage = "https://github.com/Olyno/tree-sitter-vyper"
 
 [project.optional-dependencies]
 core = ["tree-sitter~=0.24"]

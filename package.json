@@ -2,7 +2,7 @@
   "name": "tree-sitter-vyper",
   "version": "0.1.0",
   "description": "Vyper grammar for tree-sitter",
-  "repository": "https://github.com/ametade/tree-sitter-vyper",
+  "repository": "https://github.com/Olyno/tree-sitter-vyper",
   "license": "MIT",
   "author": {
     "name": "Max Brunsfeld",
@@ -12,10 +12,21 @@
     {
       "name": "Amaan Qureshi",
       "email": "amaanq12@gmail.com"
+    },
+    {
+      "name": "Olyno",
+      "email": "olyno.dev@gmail.com"
     }
   ],
   "main": "bindings/node",
   "types": "bindings/node",
+  "scripts": {
+    "build:wasm": "tree-sitter build --wasm",
+    "lint": "eslint grammar.js",
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "tree-sitter test"
+  },
   "keywords": [
     "incremental",
     "parsing",
@@ -25,36 +36,22 @@
   "files": [
     "grammar.js",
     "tree-sitter.json",
-    "binding.gyp",
-    "prebuilds/**",
     "bindings/node/*",
     "queries/*",
     "src/**",
     "*.wasm"
   ],
-  "dependencies": {
-    "node-addon-api": "^8.5.0",
-    "node-gyp-build": "^4.8.4"
-  },
   "devDependencies": {
     "eslint": "^9.35.0",
     "eslint-config-treesitter": "^1.0.2",
-    "prebuildify": "^6.0.1",
     "tree-sitter-cli": "^0.25.9"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.25.0"
+    "tree-sitter": "^0.21.0"
   },
   "peerDependenciesMeta": {
     "tree-sitter": {
-      "optional": true
+      "optional": false
     }
-  },
-  "scripts": {
-    "install": "node-gyp-build",
-    "lint": "eslint grammar.js",
-    "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js"
   }
 }

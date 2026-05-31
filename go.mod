@@ -1,4 +1,4 @@
-module github.com/ametade/tree-sitter-vyper
+module github.com/Olyno/tree-sitter-vyper
 
 go 1.22
 

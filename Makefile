@@ -3,7 +3,7 @@ $(error Windows is not supported)
 endif
 
 LANGUAGE_NAME := tree-sitter-vyper
-HOMEPAGE_URL := https://github.com/ametade/tree-sitter-vyper
+HOMEPAGE_URL := https://github.com/Olyno/tree-sitter-vyper
 VERSION := 0.1.0
 
 # repository

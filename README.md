@@ -1,6 +1,6 @@
 # tree-sitter-vyper
 
-[![CI][ci]](https://github.com/ametade/tree-sitter-vyper/actions/workflows/ci.yml)
+[![CI][ci]](https://github.com/Olyno/tree-sitter-vyper/actions/workflows/ci.yml)
 
 Vyper grammar for [tree-sitter][].
 
@@ -10,4 +10,4 @@ Vyper grammar for [tree-sitter][].
 
 - [Vyper Documentation](https://docs.vyperlang.org/)
 
-[ci]: https://img.shields.io/github/actions/workflow/status/ametade/tree-sitter-vyper/ci.yml?logo=github&label=CI
+[ci]: https://img.shields.io/github/actions/workflow/status/Olyno/tree-sitter-vyper/ci.yml?logo=github&label=CI
