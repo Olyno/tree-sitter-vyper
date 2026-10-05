@@ -310,6 +310,8 @@ bool tree_sitter_vyper_external_scanner_scan(void *payload, TSLexer *lexer, cons
                 set_raw(&delimiter);
             } else if (lexer->lookahead == 'b' || lexer->lookahead == 'B') {
                 set_bytes(&delimiter);
+            } else if (lexer->lookahead == 'x' || lexer->lookahead == 'X') {
+                // Vyper hex bytes literals: x"abcd"
             } else if (lexer->lookahead != 'u' && lexer->lookahead != 'U') {
                 break;
             }

@@ -142,3 +142,114 @@ enum Roles:
       (ERROR
         (identifier))
       (identifier))))
+
+================
+Typed for loop
+================
+
+def f():
+    for i: uint256 in range(3):
+        pass
+
+---
+
+(module
+  (function_definition
+    (identifier)
+    (parameters)
+    (block
+      (for_statement
+        (typed_parameter
+          (identifier)
+          (identifier))
+        (call
+          (identifier)
+          (argument_list
+            (integer)))
+        (block
+          (pass_statement))))))
+
+==========
+Vyper flags
+==========
+
+flag Roles:
+    ADMIN
+    USER
+
+---
+
+(module
+  (flag_definition
+    (identifier)
+    (enum_members
+      (identifier)
+      (identifier))))
+
+================
+Vyper errors
+================
+
+error Empty:
+    pass
+
+error InsufficientBalance:
+    balance: uint256
+    required: uint256
+
+---
+
+(module
+  (error_definition
+    (identifier)
+    (block
+      (pass_statement)))
+  (error_definition
+    (identifier)
+    (block
+      (assignment
+        (identifier)
+        (type
+          (identifier)))
+      (assignment
+        (identifier)
+        (type
+          (identifier))))))
+
+=========================
+Module dependency init
+=========================
+
+initializes: ownable_2step[ownable := ownable]
+
+---
+
+(module
+  (assignment
+    (identifier)
+    (type
+      (generic_type
+        (identifier)
+        (type_parameter
+          (type
+            (named_expression
+              (identifier)
+              (identifier))))))))
+
+================
+Hex bytes
+================
+
+x: bytes4 = x"abcd"
+
+---
+
+(module
+  (assignment
+    (identifier)
+    (type
+      (identifier))
+    (string
+      (string_start)
+      (string_content)
+      (string_end))))

@@ -9,10 +9,13 @@ Forked from [tree-sitter-python](https://github.com/tree-sitter/tree-sitter-pyth
 ## Supported constructs
 
 - `event`, `struct`, `interface` with member definitions
-- `enum` with member values
+- `enum` and `flag` with bare member names
+- `error` declarations
 - `log` statement
 - `extcall` and `staticcall` as assignable expressions
 - `for i: uint256 in range(...)` with typed loop variables
+- `initializes: mod[dep := dep]` dependency bindings
+- hex bytes literals (`x"..."`)
 - All standard Vyper syntax: functions, decorators, imports, type annotations, etc.
 
 ## Installation

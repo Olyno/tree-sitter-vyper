@@ -12,7 +12,15 @@
         "named": true
       },
       {
+        "type": "error_definition",
+        "named": true
+      },
+      {
         "type": "event_definition",
+        "named": true
+      },
+      {
+        "type": "flag_definition",
         "named": true
       },
       {
@@ -117,6 +125,10 @@
       },
       {
         "type": "lambda",
+        "named": true
+      },
+      {
+        "type": "named_expression",
         "named": true
       },
       {
@@ -1195,6 +1207,32 @@
     }
   },
   {
+    "type": "error_definition",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "event_definition",
     "named": true,
     "fields": {
@@ -1248,6 +1286,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "flag_definition",
+    "named": true,
+    "fields": {
+      "members": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enum_members",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2019,6 +2083,32 @@
     }
   },
   {
+    "type": "named_expression",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "not in",
     "named": false,
     "fields": {}
@@ -2589,6 +2679,14 @@
         "required": true,
         "types": [
           {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
             "type": "type",
             "named": true
           }
@@ -2797,6 +2895,10 @@
     "named": false
   },
   {
+    "type": ":=",
+    "named": false
+  },
+  {
     "type": ";",
     "named": false
   },
@@ -2926,6 +3028,10 @@
     "named": false
   },
   {
+    "type": "error",
+    "named": false
+  },
+  {
     "type": "escape_interpolation",
     "named": true
   },
@@ -2944,6 +3050,10 @@
   {
     "type": "false",
     "named": true
+  },
+  {
+    "type": "flag",
+    "named": false
   },
   {
     "type": "float",

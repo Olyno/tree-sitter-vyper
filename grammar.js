@@ -252,6 +252,8 @@ module.exports = grammar({
       $.struct_definition,
       $.interface_definition,
       $.enum_definition,
+      $.flag_definition,
+      $.error_definition,
     ),
 
     if_statement: $ => seq(
@@ -278,13 +280,24 @@ module.exports = grammar({
 
     for_statement: $ => seq(
       'for',
-      field('left', $._left_hand_side),
+      field('left', choice(
+        // `for i: uint256 in range(...)`. The general typed_parameter rule
+        // lets `type` swallow `uint256 in range(...)` as a comparison.
+        alias($.for_typed_target, $.typed_parameter),
+        $._left_hand_side,
+      )),
       'in',
       field('right', $._expressions),
       ':',
       field('body', $._suite),
       field('alternative', optional($.else_clause)),
     ),
+
+    for_typed_target: $ => prec(PREC.call, seq(
+      $.identifier,
+      ':',
+      field('type', choice($.identifier, $.generic_type)),
+    )),
 
     while_statement: $ => seq(
       'while',
@@ -399,6 +412,20 @@ module.exports = grammar({
         ),
       ),
       $._dedent,
+    ),
+
+    flag_definition: $ => seq(
+      'flag',
+      field('name', $.identifier),
+      ':',
+      field('members', $.enum_members),
+    ),
+
+    error_definition: $ => seq(
+      'error',
+      field('name', $.identifier),
+      ':',
+      field('body', $._suite),
     ),
 
     parenthesized_list_splat: $ => prec(PREC.parenthesized_list_splat, seq(
@@ -641,8 +668,16 @@ module.exports = grammar({
       $.lambda,
       $.primary_expression,
       $.conditional_expression,
+      $.named_expression,
       $.as_pattern,
     ),
+
+    // `initializes: ownable_2step[ownable := ownable]`
+    named_expression: $ => prec(PREC.call, seq(
+      field('name', $.identifier),
+      ':=',
+      field('value', $.expression),
+    )),
 
     primary_expression: $ => choice(
       $.binary_operator,
